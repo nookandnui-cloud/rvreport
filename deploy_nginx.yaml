@@ -1,0 +1,59 @@
+﻿kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: rvreport-nginx
+  namespace: sysinfra-workloads
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: rvreport-nginx
+  template:
+    metadata:
+      labels:
+        app: rvreport-nginx
+    spec:
+      volumes:
+        - name: rvreport-html
+          configMap:
+            name: rvreport
+            defaultMode: 420
+      containers:
+        - resources: {}
+          terminationMessagePath: /dev/termination-log
+          name: nginx
+          command:
+            - nginx
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: rvreport-html
+              readOnly: true
+              mountPath: /opt/app-root/src
+          terminationMessagePolicy: File
+          image: 'registry.access.redhat.com/ubi9/nginx-124:latest'
+          args:
+            - '-g'
+            - daemon off;
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
