@@ -1,0 +1,54 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: rvreport-nginx
+  namespace: sysinfra-workloads
+  uid: 642708ce-afdd-4ba6-8ca7-3765cc97044d
+  resourceVersion: '14231228'
+  creationTimestamp: '2026-09-17T09:47:43Z'
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"rvreport-nginx","namespace":"sysinfra-workloads"},"spec":{"ports":[{"name":"http","port":80,"targetPort":8080}],"selector":{"app":"rvreport-nginx"},"type":"ClusterIP"}}
+  managedFields:
+    - manager: kubectl-client-side-apply
+      operation: Update
+      apiVersion: v1
+      time: '2026-09-17T10:01:44Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:annotations':
+            .: {}
+            'f:kubectl.kubernetes.io/last-applied-configuration': {}
+        'f:spec':
+          'f:internalTrafficPolicy': {}
+          'f:ports':
+            .: {}
+            'k:{"port":80,"protocol":"TCP"}':
+              .: {}
+              'f:name': {}
+              'f:port': {}
+              'f:protocol': {}
+              'f:targetPort': {}
+          'f:selector': {}
+          'f:sessionAffinity': {}
+          'f:type': {}
+spec:
+  clusterIP: 172.30.252.243
+  ipFamilies:
+    - IPv4
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 8080
+  internalTrafficPolicy: Cluster
+  clusterIPs:
+    - 172.30.252.243
+  type: ClusterIP
+  ipFamilyPolicy: SingleStack
+  sessionAffinity: None
+  selector:
+    app: rvreport-nginx
+status:
+  loadBalancer: {}
