@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cloudflared
+  namespace: sysinfra-workloads
+spec:
+  containers:
+    - name: cloudflared
+      image: cloudflare/cloudflared:latest
+      args:
+        - tunnel
+        - --no-autoupdate
+        - --url
+        - http://rvreport-nginx:80
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
